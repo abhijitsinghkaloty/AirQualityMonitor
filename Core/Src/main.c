@@ -133,12 +133,16 @@ int main(void)
   for ( int x = 1; x <= 60 ; x++ )
   {
     itoa(x, snum, 10);
-//    HD44780_Clear();
+//  HD44780_Clear();
     HD44780_SetCursor(0,1);
     HD44780_PrintStr(snum);
     HAL_Delay (1000);
   }
   /*LCD End*/
+  uint16_t co2;
+  int32_t temperature;
+  int32_t humidity;
+  char co2a[5];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -146,8 +150,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  sensirion_i2c_hal_sleep_usec(100000);
-	  bool data_ready_flag = false;
+//	  sensirion_i2c_hal_sleep_usec(100000);
+//	  bool data_ready_flag = false;
 //	  scd4x_get_data_ready_flag(&data_ready_flag);
 //	  error = scd4x_get_data_ready_flag(&data_ready_flag);
 //	          if (error) {
@@ -158,15 +162,13 @@ int main(void)
 //	              continue;
 //	          }
 
-	  uint16_t co2;
-	  int32_t temperature;
-	  int32_t humidity;
+
 	  scd4x_read_measurement(&co2, &temperature, &humidity);
+
+	  itoa(co2, co2a, 10);
 	  HD44780_Clear();
 	  HD44780_SetCursor(0,0);
-	  char co2a[5];
-	  itoa(co2, co2a, 10);
-	  HD44780_PrintStr("CO2...(ppm)");
+	  HD44780_PrintStr("CO2(ppm) Temp(C)");
 	  HD44780_SetCursor(0,1);
 	  HD44780_PrintStr(co2a);
 	  HAL_Delay(5000);
